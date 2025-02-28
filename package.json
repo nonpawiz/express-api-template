@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon bin/www.ts",
-    "build": "tsc",
+    "build": "tsc && cp -R src/public dist/public",
     "start": "node dist/bin/www.js"
   },
   "dependencies": {
