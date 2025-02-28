@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "outDir": "dist",
+        // "rootDir": "src", // Keep rootDir as src
+        "moduleResolution": "node",
+        "module": "CommonJS",
+        "target": "ESNext",
+        "strict": true
+    },
+    "include": [
+        "src/**/*", // Include everything from src
+        "bin/**/*" // Explicitly include bin
+    ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "express-api-template",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon bin/www.ts",
+    "build": "tsc",
+    "start": "node dist/bin/www.js"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "figlet": "^1.8.0",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.5",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
