@@ -13,7 +13,7 @@ export const notFoundHandler = (req: Request, res: Response) => {
   res.status(404).json({
     code: 404,
     message: "Route not found",
-    error: `The route ${req.originalUrl} does not exist`,
+    error: `${req.originalUrl} does not exist`,
   });
 };
 
