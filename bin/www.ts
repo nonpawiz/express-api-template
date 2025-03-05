@@ -2,7 +2,7 @@ import app from "../src/app";
 import * as http from "http";
 
 const figlet = require("figlet");
-const PORT = process.env.PORT || 9090;
+const PORT = process.env.PORT || 7777;
 const server = http.createServer(app);
 
 // figlet("nonpawiz", (err, nonpawiz) => {

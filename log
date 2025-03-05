@@ -1,0 +1,8 @@
+# prisma
+npm install @prisma/client 
+npm install --save-dev prisma
+npx prisma init
+
+#jwt
+npm install jsonwebtoken bcryptjs dotenv
+npm install --save-dev @types/jsonwebtoken @types/bcryptjs

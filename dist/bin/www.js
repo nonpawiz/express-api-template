@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("../src/app"));
 const http = __importStar(require("http"));
 const figlet = require("figlet");
-const PORT = process.env.PORT || 9090;
+const PORT = process.env.PORT || 7777;
 const server = http.createServer(app_1.default);
 // figlet("nonpawiz", (err, nonpawiz) => {
 //   console.log(nonpawiz);

@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
-const routes_1 = __importDefault(require("./routes"));
-const response_1 = require("./middleware/response");
+const route_1 = __importDefault(require("./route"));
+const useRes_1 = __importDefault(require("./service/useRes"));
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var marked = require("marked");
@@ -22,7 +22,6 @@ app.use(logger(":method :url :status :response-time ms"));
 app.get("/", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "./public", "index.html"));
 });
-app.use("/api", routes_1.default);
-app.use(response_1.notFoundHandler);
-app.use(response_1.errorHandler);
+app.use("/api", route_1.default);
+app.use((0, useRes_1.default)().notFoundHandler);
 exports.default = app;

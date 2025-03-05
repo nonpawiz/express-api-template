@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
-import router from "./routes";
-import { notFoundHandler, errorHandler } from "./middleware/response";
+import router from "./route";
+import useRes from "./service/useRes";
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var marked = require("marked");
@@ -20,7 +20,6 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "./public", "index.html"));
 });
 app.use("/api", router);
-app.use(notFoundHandler);
-app.use(errorHandler);
+app.use(useRes().notFoundHandler);
 
 export default app;
