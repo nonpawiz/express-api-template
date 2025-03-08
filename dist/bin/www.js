@@ -38,15 +38,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("../src/app"));
 const http = __importStar(require("http"));
-const figlet = require("figlet");
-const PORT = process.env.PORT || 7777;
+var figlet = require("figlet");
+const PORT = process.env.PORT || 8888;
 const server = http.createServer(app_1.default);
-// figlet("nonpawiz", (err, nonpawiz) => {
-//   console.log(nonpawiz);
-//   console.log(
-//     `Server is Successfully Running, and App is listening on http://localhost:${port}/`
-//   );
-// });
 server.listen(PORT, () => {
     figlet("nonpawiz.dev", (err, text) => {
         console.log(text);

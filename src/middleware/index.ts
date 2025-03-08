@@ -50,13 +50,15 @@ export const hasRole = (allowedRoles: string[]) => {
       res.status(401).json({
         code: 401,
         message: `Unauthorized`,
-      });debugger                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+      });
+      debugger;
     } else {
       const role = checked.tokenData.role?.name;
       if (!allowedRoles.includes(role!)) {
-        res.status(403).json({ message: "Forbidden: Access Denied" });
+        res.status(403).json({ message: "Permission Denied" });
+      } else {
+        next();
       }
-      next();
     }
   };
 };

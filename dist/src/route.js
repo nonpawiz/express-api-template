@@ -10,8 +10,11 @@ const middleware_1 = require("./middleware");
 const authRoute_1 = __importDefault(require("./routes/authRoute"));
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
 exports.router.use("/auth", authRoute_1.default);
-exports.router.use("/user", middleware_1.authenticate, (0, middleware_1.hasRole)(["me", "Admin"]), userRoute_1.default);
+exports.router.use("/user", middleware_1.authenticate, (0, middleware_1.hasRole)([`admin`]), userRoute_1.default);
 exports.router.use("/test", (req, res) => {
-    res.status(200).json({ msg: "xxx" });
+    res.status(200).json({
+        code: 200,
+        msg: "system running!",
+    });
 });
 exports.default = exports.router;

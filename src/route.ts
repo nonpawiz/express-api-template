@@ -5,9 +5,12 @@ import authRoute from "./routes/authRoute";
 import userRoute from "./routes/userRoute";
 
 router.use("/auth", authRoute);
-router.use("/user", authenticate, hasRole(["me", "Admin"]), userRoute);
+router.use("/user", authenticate, hasRole([`admin`]), userRoute);
 
 router.use("/test", (req, res) => {
-  res.status(200).json({ msg: "xxx" });
+  res.status(200).json({
+    code: 200,
+    msg: "system running!",
+  });
 });
 export default router;

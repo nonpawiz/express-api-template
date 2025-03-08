@@ -1,8 +1,36 @@
+@font-face {
+  font-family: CHULAJARUEK;
+  src: url(./CHULAJARUEK/CHULAJARUEK.ttf);
+}
+
 body {
-  padding: 10px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /* font-family: "CHULAJARUEK"; */
+  font-family: "Kanit";
+  padding: 20px;
+  font-size: 14px;
+  background-color: #121212;
+  color: white;
+}
+
+p,
+div {
+  font-size: 12px;
+}
+
+.chula {
+  font-family: "CHULAJARUEK";
 }
 
 a {
-  color: #00B7FF;
+  color: palegreen;
+  text-decoration: none;
+}
+
+th,
+td {
+  border: 0.5px solid white;
+}
+
+td {
+  padding: 1px 7px 1px 7px;
 }

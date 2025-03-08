@@ -7,6 +7,8 @@ export interface UserType {
   firstName: string;
   lastName: string;
   password: string;
+  roleId: number;
+  userImgProfile?: string;
   createdAt?: string;
   updatedAt?: string;
 
@@ -15,7 +17,14 @@ export interface UserType {
 
 export type AddUserType = Pick<
   UserType,
-  "username" | "email" | "prefixId" | "firstName" | "lastName" | "password"
+  | "username"
+  | "email"
+  | "prefixId"
+  | "firstName"
+  | "lastName"
+  | "password"
+  | "roleId"
+  | "userImgProfile"
 >;
 
 export type EditUserType = Partial<Omit<UserType, "role">>;

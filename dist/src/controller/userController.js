@@ -6,16 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = __importDefault(require("../service/db"));
 const useUuid_1 = __importDefault(require("../service/useUuid"));
 const useHash_1 = __importDefault(require("../service/useHash"));
-const useMoment_1 = __importDefault(require("../service/useMoment"));
+const serviceController_1 = __importDefault(require("./serviceController"));
 const userController = () => {
     const getUserList = async (req) => {
         const page = Number(req.query[`page`]) || 1;
         const size = Number(req.query[`size`]) || 50;
+        const all = Boolean(req.query[`all`]) || false;
         const skip = (page - 1) * size;
         const users = await db_1.default.user.findMany({
             skip: skip,
             take: size,
-            where: { deletedAt: null },
+            where: all ? {} : { deletedAt: null },
             orderBy: { createdAt: "asc" },
             include: {
                 role: {
@@ -27,7 +28,7 @@ const userController = () => {
             },
         });
         const totalUsers = await db_1.default.user.count({
-            where: { deletedAt: null },
+            where: all ? {} : { deletedAt: null },
         });
         return {
             pagination: {
@@ -62,6 +63,7 @@ const userController = () => {
                     firstName: body.firstName,
                     lastName: body.lastName,
                     password: await (0, useHash_1.default)().hash(body.password),
+                    roleId: body.roleId || 3,
                 },
             });
             return "add success";
@@ -86,11 +88,57 @@ const userController = () => {
             throw error;
         }
     };
+    const updatePictureProfile = async (req) => {
+        return new Promise((resolve, reject) => {
+            (0, serviceController_1.default)()
+                .formData()
+                .parse(req, async (err, field, files) => {
+                const res = {};
+                try {
+                    const language = req.headers["accept-language"] || "en";
+                    if (err)
+                        return reject(err);
+                    const { userNo } = field;
+                    const filesToSave = Array.isArray(files.picture)
+                        ? files.picture
+                        : [files.picture];
+                    for (const file of filesToSave) {
+                        const user = await db_1.default.user.findFirst({
+                            where: { userNo: `${userNo}` },
+                        });
+                        if (!user) {
+                            return reject(new Error(language === "th" ? "ไม่พบชื่อผู้ใช้" : "User not found."));
+                        }
+                        if (user.userImgProfile != null) {
+                            (0, serviceController_1.default)().deleteFile(user.userImgProfile.split("/uploads")[1]);
+                        }
+                        const fileExtension = (0, serviceController_1.default)().mimeToExtension(file.mimetype);
+                        const newFileName = `${(0, useUuid_1.default)()}-${user.userId}${fileExtension}`;
+                        (0, serviceController_1.default)().saveFile(file, `userImgProfile`, newFileName);
+                        await db_1.default.user.update({
+                            where: { userNo: `${userNo}` },
+                            data: {
+                                userImgProfile: `/uploads/userImgProfile/${newFileName}`,
+                            },
+                        });
+                        return resolve({
+                            code: 200,
+                            upload: "success",
+                            file: newFileName,
+                        });
+                    }
+                }
+                catch (error) {
+                    reject(error);
+                }
+            });
+        });
+    };
     const dropUser = async ({ userNo }) => {
         try {
-            const edit = await db_1.default.user.update({
+            await db_1.default.user.update({
                 where: { userNo: userNo },
-                data: { deletedAt: (0, useMoment_1.default)().now },
+                data: { deletedAt: new Date() },
             });
             return "drop success";
         }
@@ -98,6 +146,6 @@ const userController = () => {
             throw error;
         }
     };
-    return { getUser, addUser, editUser, dropUser };
+    return { getUser, addUser, editUser, updatePictureProfile, dropUser };
 };
 exports.default = userController;

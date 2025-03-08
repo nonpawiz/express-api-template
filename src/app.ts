@@ -2,15 +2,23 @@ import express from "express";
 import path from "path";
 import router from "./route";
 import useRes from "./service/useRes";
+import i18next from "./service/i18n/i18n";
+import middleware from "i18next-http-middleware";
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var marked = require("marked");
+var formidable = require("formidable");
 const app = express();
 
+export const form = new formidable.IncomingForm();
+form.uploadDir = path.join(__dirname, "./public/uploads");
+form.keepExtensions = true;
+
 // Middleware
+app.use(middleware.handle(i18next));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(logger("dev"));
 app.use(logger(":method :url :status :response-time ms"));

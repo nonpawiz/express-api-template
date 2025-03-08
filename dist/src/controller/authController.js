@@ -63,5 +63,4 @@ const authController = () => {
     };
     return { login, checkAuthorized };
 };
-// futureDate.diff(moment(), "minutes");
 exports.default = authController;

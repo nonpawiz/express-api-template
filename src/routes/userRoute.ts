@@ -2,36 +2,84 @@ import userController from "../controller/userController";
 import { router as userRoute } from "../route";
 import useRes from "../service/useRes";
 import { AddUserType, EditUserType } from "../service/type";
-// @GET
-userRoute.get("/getUser", async (req, res, next) => {
-  try {
-    const users = await userController().getUser(req);
-    useRes().okHandler(res, users);
-  } catch (error) {
-    useRes().errorHandler(res, error, "");
-  }
-});
+import { Request, Response, NextFunction } from "express";
+import { form } from "../app";
+import path = require("path");
+import fs from "fs";
+import useUuid from "../service/useUuid";
 
-// @POST
-userRoute.post("/addUser", async (req, res, next) => {
-  try {
-    const { body } = req;
-    const users = await userController().addUser(body as AddUserType);
-    useRes().okHandler(res, users);
-  } catch (error) {
-    useRes().errorHandler(res, error, "");
+// @getUser
+userRoute.get(
+  "/getUser",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await userController().getUser(req);
+      console.log("result", result);
+      useRes().okHandler(res, result);
+    } catch (error) {
+      useRes().errorHandler(res, error, "");
+    }
   }
-});
+);
 
-// @POST
-userRoute.post("/editUser", async (req, res, next) => {
-  try {
-    const { body } = req;
-    const users = await userController().editUser(body as EditUserType);
-    useRes().okHandler(res, users);
-  } catch (error) {
-    useRes().errorHandler(res, error, "");
+// @addUser
+userRoute.post(
+  "/addUser",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { body } = req;
+      const result = await userController().addUser(body as AddUserType);
+      console.log("result", result);
+      useRes().okHandler(res, req.t(`addUserSuccess`));
+    } catch (error) {
+      useRes().errorHandler(res, error, req.t(`addUserError`));
+    }
   }
-});
+);
+
+// @editUser
+userRoute.post(
+  "/editUser",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const language: string = req.headers["accept-language"] || "en";
+      const { body } = req;
+      const result = await userController().editUser(body as EditUserType);
+      console.log("result", result);
+      useRes().okHandler(res, req.t(`saveSuccess`));
+    } catch (error) {
+      useRes().errorHandler(res, error, "");
+    }
+  }
+);
+
+// @updatePictureProfile
+userRoute.post(
+  "/updatePictureProfile",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await userController().updatePictureProfile(req);
+      console.log("result", result);
+      useRes().okHandler(res, req.t(`saveSuccess`));
+    } catch (error) {
+      useRes().errorHandler(res, error, "");
+    }
+  }
+);
+
+// @dropUser
+userRoute.post(
+  "/dropUser",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      console.log("req.body", req.body);
+      const result = await userController().dropUser(req.body);
+      console.log("result", result);
+      useRes().okHandler(res, req.t(`saveSuccess`));
+    } catch (error) {
+      useRes().errorHandler(res, error, "");
+    }
+  }
+);
 
 export default userRoute;

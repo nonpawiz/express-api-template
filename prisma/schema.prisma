@@ -14,20 +14,22 @@ datasource db {
 }
 
 model user {
-  userId    Int     @id @default(autoincrement())
-  userNo    String  @unique
-  username  String
-  email     String
+  userId   Int    @id @default(autoincrement())
+  userNo   String @unique
+  username String
+  email    String
+
   prefixId  Int
   firstName String
   lastName  String
   password  String?
 
-  roleId    Int       @default(3) // Default to 'User'
-  role      role      @relation(fields: [roleId], references: [id])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  deletedAt DateTime?
+  roleId         Int       @default(3) // Default to 'User'
+  role           role      @relation(fields: [roleId], references: [id])
+  userImgProfile String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+  deletedAt      DateTime?
 }
 
 model role {

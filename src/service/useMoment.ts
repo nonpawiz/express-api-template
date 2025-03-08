@@ -12,7 +12,7 @@ export default () => {
     moment(date).format("YYYY-MM-DD HH:mm:ss");
 
   const formatUtc = (date: MomentInput) =>
-    moment(date).utc().format("YYYY-MM-DD HH:mm:ss");
+    moment(date).utcOffset(7).format("YYYY-MM-DD HH:mm:ss");
 
   return {
     now,
