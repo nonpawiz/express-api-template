@@ -8,6 +8,7 @@
 - ✅ Prisma ORM for database management
 - ✅ Role-based access control (RBAC)
 - ✅ Middleware for authentication (JWT) & validation
+- ✅ File upload functionality with customizable storage options
 
 ### 🔗 API Documentation
 
