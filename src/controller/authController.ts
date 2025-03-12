@@ -5,8 +5,8 @@ import moment from "moment";
 import { Response } from "express";
 import { UserType } from "../service/type";
 
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || 10;
-const JWT_REFRESH_IN = process.env.JWT_REFRESH_IN || 5;
+export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || 10;
+export const JWT_REFRESH_IN = process.env.JWT_REFRESH_IN || 5;
 
 const authController = () => {
   const login = async ({
@@ -28,7 +28,7 @@ const authController = () => {
       },
     });
     if (user == null)
-      throw Error(
+      throw new Error(
         `${language == `th` ? `ไม่พบชื่อผู้ใช้` : `User not found.`}`
       );
     if (await useHash().compare(password, user.password!)) {
@@ -42,12 +42,12 @@ const authController = () => {
         user: tokenData,
       };
     }
-    throw Error(
+    throw new Error(
       `${language == `th` ? `รหัสผ่านไม่ถูกต้อง` : `Password is incorrect.`}`
     );
   };
 
-  const checkAuthorized = async (token: string, res: Response) => {
+  const me = async (token: string, res: Response) => {
     try {
       const accessToken = token.split("Bearer ")[1];
       let tokenData: any = useJwt().verifyToken(accessToken);
@@ -72,6 +72,6 @@ const authController = () => {
     }
   };
 
-  return { login, checkAuthorized };
+  return { login, me };
 };
 export default authController;

@@ -7,6 +7,8 @@ const db_1 = __importDefault(require("../service/db"));
 const useUuid_1 = __importDefault(require("../service/useUuid"));
 const useHash_1 = __importDefault(require("../service/useHash"));
 const serviceController_1 = __importDefault(require("./serviceController"));
+const useJwt_1 = __importDefault(require("../service/useJwt"));
+const authController_1 = require("./authController");
 const userController = () => {
     const getUserList = async (req) => {
         const page = Number(req.query[`page`]) || 1;
@@ -52,6 +54,19 @@ const userController = () => {
             throw error;
         }
     };
+    const findUser = async (req) => {
+        try {
+            const userNo = req.params.userNo;
+            const res = await db_1.default.user.findFirst({
+                where: { userNo: userNo },
+            });
+            // const users = await getUserList(req);
+            return res;
+        }
+        catch (error) {
+            throw error;
+        }
+    };
     const addUser = async (body) => {
         try {
             const users = await db_1.default.user.create({
@@ -72,7 +87,7 @@ const userController = () => {
             throw error;
         }
     };
-    const editUser = async (data) => {
+    const editUser = async (data, res, language) => {
         try {
             const userNo = data.userNo;
             delete data.userNo;
@@ -82,6 +97,16 @@ const userController = () => {
                 where: { userNo: userNo },
                 data: data,
             });
+            const user = await db_1.default.user.findFirst({
+                where: { userNo: userNo },
+            });
+            //
+            let tokenData = {
+                ...user,
+                language: language,
+            };
+            delete tokenData.password;
+            res.set("refresh_token", (0, useJwt_1.default)().generateToken(tokenData, `${authController_1.JWT_EXPIRES_IN}m`));
             return "edit success";
         }
         catch (error) {
@@ -146,6 +171,13 @@ const userController = () => {
             throw error;
         }
     };
-    return { getUser, addUser, editUser, updatePictureProfile, dropUser };
+    return {
+        getUser,
+        findUser,
+        addUser,
+        editUser,
+        updatePictureProfile,
+        dropUser,
+    };
 };
 exports.default = userController;

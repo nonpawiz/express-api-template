@@ -1,10 +1,12 @@
 import prisma from "../service/db";
-import { Request } from "express";
+import { Request, Response } from "express";
 import { AddUserType, EditUserType, UserType } from "../service/type";
 import useUuid from "../service/useUuid";
 import useHash from "../service/useHash";
 import useMoment from "../service/useMoment";
 import serviceController from "./serviceController";
+import useJwt from "../service/useJwt";
+import { JWT_EXPIRES_IN } from "./authController";
 
 const userController = () => {
   const getUserList = async (req: Request) => {
@@ -45,10 +47,24 @@ const userController = () => {
       })),
     };
   };
+
   const getUser = async (req: Request) => {
     try {
       const users = await getUserList(req);
       return users;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const findUser = async (req: Request) => {
+    try {
+      const userNo = req.params.userNo;
+      const res = await prisma.user.findFirst({
+        where: { userNo: userNo },
+      });
+      // const users = await getUserList(req);
+      return res;
     } catch (error) {
       throw error;
     }
@@ -74,7 +90,11 @@ const userController = () => {
     }
   };
 
-  const editUser = async (data: EditUserType) => {
+  const editUser = async (
+    data: EditUserType,
+    res: Response,
+    language: string
+  ) => {
     try {
       const userNo = data.userNo;
       delete data.userNo;
@@ -84,6 +104,23 @@ const userController = () => {
         where: { userNo: userNo },
         data: data,
       });
+
+      const user = await prisma.user.findFirst({
+        where: { userNo: userNo },
+      });
+
+      //
+      let tokenData: any = {
+        ...user,
+        language: language,
+      };
+      delete tokenData.password;
+
+      res.set(
+        "refresh_token",
+        useJwt().generateToken(tokenData, `${JWT_EXPIRES_IN}m`)
+      );
+
       return "edit success";
     } catch (error) {
       throw error;
@@ -155,7 +192,14 @@ const userController = () => {
     }
   };
 
-  return { getUser, addUser, editUser, updatePictureProfile, dropUser };
+  return {
+    getUser,
+    findUser,
+    addUser,
+    editUser,
+    updatePictureProfile,
+    dropUser,
+  };
 };
 
 export default userController;

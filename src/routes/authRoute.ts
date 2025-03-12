@@ -7,7 +7,7 @@ import { authenticate } from "../middleware";
 authRoute.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    const language: string = req.headers["accept-language"] || "en";
+    const language = useRes().language(req);
     const data = await authController().login({
       username,
       password,
@@ -19,12 +19,12 @@ authRoute.post("/login", async (req, res, next) => {
   }
 });
 
-// checkAuthorized
-authRoute.post("/checkAuthorized", async (req, res, next) => {
+// me
+authRoute.post("/me", async (req, res, next) => {
   try {
     const token: string = req.headers["authorization"] || "";
-    const checked = await authController().checkAuthorized(token, res);
-    res.status(checked == undefined ? 401 : 200).json(
+    const checked = await authController().me(token, res);
+    res.status(200).json(
       checked == undefined
         ? {
             code: 401,

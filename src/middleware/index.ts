@@ -11,16 +11,16 @@ export const authenticate = async (
 
   switch (true) {
     case token === "":
-      res.status(401).json({
+      res.status(200).json({
         code: 401,
         error: "Unauthorized",
       });
       break;
     case token !== "":
       try {
-        const checked = await authController().checkAuthorized(token, res);
+        const checked = await authController().me(token, res);
         if (checked == undefined) {
-          res.status(401).json({
+          res.status(200).json({
             code: 401,
             message: `Unauthorized`,
           });
@@ -28,7 +28,7 @@ export const authenticate = async (
           next();
         }
       } catch (error) {
-        res.status(401).json({
+        res.status(200).json({
           code: 401,
           error: `${
             language == `th` ? `เซสชันหมดอายุ` : `The session has expired.`
@@ -45,9 +45,9 @@ export const hasRole = (allowedRoles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const token: string = req.headers["authorization"] || "";
     const language: string = req.headers["accept-language"] || "en";
-    const checked = await authController().checkAuthorized(token, res);
+    const checked = await authController().me(token, res);
     if (checked == undefined) {
-      res.status(401).json({
+      res.status(200).json({
         code: 401,
         message: `Unauthorized`,
       });
@@ -55,7 +55,10 @@ export const hasRole = (allowedRoles: string[]) => {
     } else {
       const role = checked.tokenData.role?.name;
       if (!allowedRoles.includes(role!)) {
-        res.status(403).json({ message: "Permission Denied" });
+        res.status(200).json({
+          code: 403,
+          message: "Permission Denied",
+        });
       } else {
         next();
       }

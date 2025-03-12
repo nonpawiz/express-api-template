@@ -1,0 +1,861 @@
+{
+	"info": {
+		"_postman_id": "2136bf45-45de-4568-9e95-cdcff02abd3e",
+		"name": "Express-Api-Template",
+		"description": "**Headers Required**  \n`Accept-Language : th/en`\n\n> **Author**  \nnonpawiz - [https://github.com/nonpawiz/](https://github.com/nonpawiz/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26430370"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"pm.collectionVariables.set('access_token', res.access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "th",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "`เข้าสู่ระบบ`"
+					},
+					"response": [
+						{
+							"name": "login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept-Language",
+										"value": "th",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"nonpawiz\",\n    \"password\": \"12345\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "749"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2ed-45P/tFQ+/vr/H9PS+KGp+20XAQc\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Mar 2025 06:01:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJObyI6IjZhZjMzNTlkLTUxM2UtNDM2Yi04YzA1LTkxNjljOWQ5N2MzYiIsInVzZXJuYW1lIjoibm9ucGF3aXoiLCJlbWFpbCI6Im5vbnBhd2l6QHN5c3RlbS5jb20iLCJwcmVmaXhJZCI6MCwiZmlyc3ROYW1lIjoiIiwibGFzdE5hbWUiOiIiLCJjcmVhdGVkQXQiOiIyMDI1LTAyLTEyIDAyOjMxOjM5IiwidXBkYXRlZEF0IjoiMjAyNS0wMy0wMSAwNToyMzo1NSIsImRlbGV0ZWRBdCI6bnVsbCwibGFuZ3VhZ2UiOiJ0aCIsImlhdCI6MTc0MDgwODg4MSwiZXhwIjoxNzQwODA5MDAxfQ.1gsWuNCj2xIzoXV1gO4AP3lWVciEp7CN0i-z9_xy_CU\",\n    \"user\": {\n        \"userId\": 2,\n        \"userNo\": \"6af3359d-513e-436b-8c05-9169c9d97c3b\",\n        \"username\": \"nonpawiz\",\n        \"email\": \"nonpawiz@system.com\",\n        \"prefixId\": 0,\n        \"firstName\": \"\",\n        \"lastName\": \"\",\n        \"createdAt\": \"2025-02-12 02:31:39\",\n        \"updatedAt\": \"2025-03-01 05:23:55\",\n        \"deletedAt\": null,\n        \"language\": \"th\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "checkAuthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const refresh_token = pm.response.headers.get(\"refresh_token\")",
+									"if (refresh_token) {",
+									"    pm.collectionVariables.set('access_token', refresh_token);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "th",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/checkAuthorized",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"checkAuthorized"
+							]
+						},
+						"description": "`เช็ค authorize`"
+					},
+					"response": [
+						{
+							"name": "checkAuthorized",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept-Language",
+										"value": "th",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/checkAuthorized",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"checkAuthorized"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "344"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"158-59Lwvq7ZRG5fsQLArICuXs+8XKo\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Mar 2025 06:15:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"message\": \"Authorized\",\n    \"info\": {\n        \"diff\": 117.732,\n        \"unit\": \"seconds\",\n        \"tokenData\": {\n            \"userId\": 2,\n            \"userNo\": \"6af3359d-513e-436b-8c05-9169c9d97c3b\",\n            \"username\": \"nonpawiz\",\n            \"email\": \"nonpawiz@system.com\",\n            \"prefixId\": 0,\n            \"firstName\": \"\",\n            \"lastName\": \"\",\n            \"createdAt\": \"2025-02-12 02:31:39\",\n            \"updatedAt\": \"2025-03-01 05:23:55\",\n            \"deletedAt\": null,\n            \"language\": \"th\"\n        }\n    }\n}"
+						},
+						{
+							"name": "checkAuthorized",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept-Language",
+										"value": "th",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/checkAuthorized",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"checkAuthorized"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"25-Y/9DhNk+fkg6hkvizDVGX7cBV4I\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Mar 2025 06:16:04 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 401,\n    \"message\": \"Unauthorized\"\n}"
+						}
+					]
+				}
+			],
+			"description": "> **การ Authorization**  \nเมื่อล็อกอินแล้วจะได้ access_token เพื่อใช้ authorize เมื่อหลังบ้านเช็คว่าใกล้หมดอายุ จะแนบ refresh_token มากับ headers จากนั้นหน้าบ้านนำมาเก็บเป็น access_token เพื่อใช้ authorize ต่อไป"
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "getUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const refresh_token = pm.response.headers.get(\"refresh_token\")",
+									"if (refresh_token) {",
+									"    pm.collectionVariables.set('access_token', refresh_token);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "th",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/user/getUser?size=50&page=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"getUser"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "50"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "all",
+									"value": "true",
+									"description": "all=true ดึง user ที่ลบแล้วมาด้วย",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const refresh_token = pm.response.headers.get(\"refresh_token\")",
+									"if (refresh_token) {",
+									"    pm.collectionVariables.set('access_token', refresh_token);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "th",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"test\",\n    \"email\": \"test@system.com\",\n    \"prefixId\": 0,\n    \"firstName\": \"test\",\n    \"lastName\": \"dev\",\n    \"password\": \"12345\",\n    \"roleId\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user/addUser",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"addUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const refresh_token = pm.response.headers.get(\"refresh_token\")",
+									"if (refresh_token) {",
+									"    pm.collectionVariables.set('access_token', refresh_token);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "th",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userNo\": \"6af3359d-513e-436b-8c05-9169c9d97c3b\",\n    \"username\": \"nonpawiz\",\n    \"email\": \"nonpawiz@system.com\",\n    \"prefixId\": 0,\n    \"firstName\": \"Nonpawit\",\n    \"lastName\": \"Thonthong\"\n    // \"password\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user/editUser",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"editUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userPicture",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const refresh_token = pm.response.headers.get(\"refresh_token\")",
+									"if (refresh_token) {",
+									"    pm.collectionVariables.set('access_token', refresh_token);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "th",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "userNo",
+									"value": "6af3359d-513e-436b-8c05-9169c9d97c3a",
+									"description": "uuid",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "postman-cloud:///1effb788-7ca8-4ae0-8f47-f947cdfbd609"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user/updatePictureProfile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"updatePictureProfile"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "userPicture",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept-Language",
+										"value": "th",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "userNo",
+											"value": "6af3359d-513e-436b-8c05-9169c9d97c3a",
+											"description": "uuid",
+											"type": "text"
+										},
+										{
+											"key": "picture",
+											"type": "file",
+											"src": "postman-cloud:///1effb788-7ca8-4ae0-8f47-f947cdfbd609"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/user/updatePictureProfile",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"updatePictureProfile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "83"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"53-m7pVSYBR6oY3+tjg3B5tV5IlpyE\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 08 Mar 2025 04:02:26 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"upload\": \"success\",\n    \"file\": \"47a5600a-14da-412d-b288-0d1861673243-1.png\"\n}"
+						}
+					]
+				},
+				{
+					"name": "dropUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const refresh_token = pm.response.headers.get(\"refresh_token\")",
+									"if (refresh_token) {",
+									"    pm.collectionVariables.set('access_token', refresh_token);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "th",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userNo\": \"21e9dd93-3c7d-4d17-be3b-cbdf49e96b03\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user/dropUser",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"dropUser"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "dropUser",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept-Language",
+										"value": "th",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"userNo\": \"21e9dd93-3c7d-4d17-be3b-cbdf49e96b03\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/user/dropUser",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"dropUser"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "37"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"25-sglzcJKW8ckWao770EHI3mWbRJM\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 08 Mar 2025 04:01:49 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"message\": \"drop success\"\n}"
+						}
+					]
+				}
+			],
+			"description": "``` json\n/** [Body][POST] addUser\n{    \n   \"username\": \"\", // required\n   \"email\": \"\", // required\n   \"prefixId\": 0, // required\n   \"firstName\": \"\", // required\n   \"lastName\": \"\", // required\n   \"password\" : \"\" // required\n}\n\n ```\n\n``` json\n/** [Body][POST] editUser\n{    \n   \"useNo\": \"\", // required \n   \"username\": \"\",    \n   \"email\": \"\", \n   \"prefixId\": 0,\n   \"firstName\": \"\",\n   \"lastName\": \"\",\n   \"password\" : \"\"\n}\n\n ```\n\n``` json\n/** [Body][POST] dropUser\n{    \n   \"useNo\": \"\", // required \n}\n\n ```"
+		},
+		{
+			"name": "test-request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:7777",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7777"
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "X-API-Key",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8888"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

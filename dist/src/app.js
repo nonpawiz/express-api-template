@@ -11,14 +11,19 @@ const useRes_1 = __importDefault(require("./service/useRes"));
 const i18n_1 = __importDefault(require("./service/i18n/i18n"));
 const i18next_http_middleware_1 = __importDefault(require("i18next-http-middleware"));
 var cookieParser = require("cookie-parser");
+var cors = require("cors");
 var logger = require("morgan");
-var marked = require("marked");
 var formidable = require("formidable");
 const app = (0, express_1.default)();
 exports.form = new formidable.IncomingForm();
 exports.form.uploadDir = path_1.default.join(__dirname, "./public/uploads");
 exports.form.keepExtensions = true;
 // Middleware
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept-Language"], // Allow specific headers
+}));
 app.use(i18next_http_middleware_1.default.handle(i18n_1.default));
 app.use(express_1.default.json());
 app.use(express_1.default.static(path_1.default.join(__dirname, "public")));

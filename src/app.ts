@@ -4,9 +4,10 @@ import router from "./route";
 import useRes from "./service/useRes";
 import i18next from "./service/i18n/i18n";
 import middleware from "i18next-http-middleware";
+
 var cookieParser = require("cookie-parser");
+var cors = require("cors");
 var logger = require("morgan");
-var marked = require("marked");
 var formidable = require("formidable");
 const app = express();
 
@@ -15,6 +16,13 @@ form.uploadDir = path.join(__dirname, "./public/uploads");
 form.keepExtensions = true;
 
 // Middleware
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept-Language"], // Allow specific headers
+  })
+);
 app.use(middleware.handle(i18next));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));

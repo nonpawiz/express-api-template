@@ -10,7 +10,7 @@ const useRes_1 = __importDefault(require("../service/useRes"));
 route_1.router.post("/login", async (req, res, next) => {
     try {
         const { username, password } = req.body;
-        const language = req.headers["accept-language"] || "en";
+        const language = (0, useRes_1.default)().language(req);
         const data = await (0, authController_1.default)().login({
             username,
             password,
@@ -22,12 +22,12 @@ route_1.router.post("/login", async (req, res, next) => {
         (0, useRes_1.default)().errorHandler(res, error, "");
     }
 });
-// checkAuthorized
-route_1.router.post("/checkAuthorized", async (req, res, next) => {
+// me
+route_1.router.post("/me", async (req, res, next) => {
     try {
         const token = req.headers["authorization"] || "";
-        const checked = await (0, authController_1.default)().checkAuthorized(token, res);
-        res.status(checked == undefined ? 401 : 200).json(checked == undefined
+        const checked = await (0, authController_1.default)().me(token, res);
+        res.status(200).json(checked == undefined
             ? {
                 code: 401,
                 message: `Unauthorized`,

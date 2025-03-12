@@ -17,7 +17,21 @@ userRoute.get(
       console.log("result", result);
       useRes().okHandler(res, result);
     } catch (error) {
-      useRes().errorHandler(res, error, "");
+      useRes().errorHandler(res, error, req.t(`failed`));
+    }
+  }
+);
+
+// @getUser
+userRoute.get(
+  "/findUser/:userNo",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await userController().findUser(req);
+      console.log("result", result);
+      useRes().okHandler(res, result);
+    } catch (error) {
+      useRes().errorHandler(res, error, req.t(`failed`));
     }
   }
 );
@@ -42,13 +56,17 @@ userRoute.post(
   "/editUser",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const language: string = req.headers["accept-language"] || "en";
       const { body } = req;
-      const result = await userController().editUser(body as EditUserType);
+      const language = useRes().language(req);
+      const result = await userController().editUser(
+        body as EditUserType,
+        res,
+        language
+      );
       console.log("result", result);
       useRes().okHandler(res, req.t(`saveSuccess`));
     } catch (error) {
-      useRes().errorHandler(res, error, "");
+      useRes().errorHandler(res, error, req.t(`saveError`));
     }
   }
 );
@@ -62,7 +80,7 @@ userRoute.post(
       console.log("result", result);
       useRes().okHandler(res, req.t(`saveSuccess`));
     } catch (error) {
-      useRes().errorHandler(res, error, "");
+      useRes().errorHandler(res, error, req.t(`failed`));
     }
   }
 );

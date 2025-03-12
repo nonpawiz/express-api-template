@@ -2,5 +2,6 @@
     "saveSuccess": "Saved Successfully",
     "saveError": "Save Failed",
     "addUserSuccess": "Add User Successfully",
-    "addUserError": "Add User Failed"
+    "addUserError": "Add User Failed",
+    "failed": "พบข้อผิดพลาด"
 }
