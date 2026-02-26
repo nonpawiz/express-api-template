@@ -1,4 +1,4 @@
-# Express-Api-Template V2
+# EXPRESS-API-TEMPLATE V1
 
 ### 🎯 Features
 
