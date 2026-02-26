@@ -1,10 +1,10 @@
 @font-face {
-  font-family: CHULAJARUEK;
-  src: url(./CHULAJARUEK/CHULAJARUEK.ttf);
+  font-family: JetBrainsMono;
+  src: url(./JetBrainsMono-VariableFont_wght.ttf);
 }
 
 body {
-  /* font-family: "CHULAJARUEK"; */
+  font-family: "JetBrainsMono";
   font-family: "Kanit";
   padding: 20px;
   font-size: 14px;
@@ -17,12 +17,9 @@ div {
   font-size: 12px;
 }
 
-.chula {
-  font-family: "CHULAJARUEK";
-}
 
 a {
-  color: palegreen;
+  color: white;
   text-decoration: none;
 }
 

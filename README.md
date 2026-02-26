@@ -1,4 +1,4 @@
-# Express-Api-Template
+# Express-Api-Template V2
 
 ### 🎯 Features
 
@@ -21,17 +21,24 @@
 ### 📺 Command
 
 Run the following commands to manage your project:
+  rename `.env.example` to `.env`
 
 ```bash
+
   docker-compose up -d
   docker-compose down
 
   npm install
-  npm run dev
   npm run prisma
+  npm run dev
   npm run build
 ```
+> ##
+> ### 🚀 Service Endpoints
+>> ##### API 👉 http://localhost:8888
+> > ##### DATABASE  👉 http://localhost:8887
+> > ##### Postman Demo  👉 [Link](https://www.postman.com/nonpawiz/express-api-template/collection/j7b4g22/express-api-template)
+> ##
 
-### 🔗 Express-Api-Template APIs Doc - [Postman](https://www.postman.com/nonpawiz/express-api-template/documentation/j7b4g22/express-api-template)
+#### 🥷 Author - [nonpawiz](https://github.com/nonpawiz/)
 
-### 🥷 Author - [nonpawiz](https://github.com/nonpawiz/)

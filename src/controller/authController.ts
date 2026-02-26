@@ -5,10 +5,9 @@ import moment from "moment";
 import { Response } from "express";
 import { UserType } from "../service/type";
 
-export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || 10;
-export const JWT_REFRESH_IN = process.env.JWT_REFRESH_IN || 5;
 
-const authController = () => {
+const jwt = useJwt()
+const AuthController = () => {
   const login = async ({
     username,
     password,
@@ -38,7 +37,8 @@ const authController = () => {
       };
       delete tokenData.password;
       return {
-        access_token: useJwt().generateToken(tokenData, `${JWT_EXPIRES_IN}m`),
+        access_token: jwt.newAccessToken(tokenData),
+        refresh_token: jwt.newRefreshToken(tokenData),
         user: tokenData,
       };
     }
@@ -47,23 +47,15 @@ const authController = () => {
     );
   };
 
-  const me = async (token: string, res: Response) => {
+  const me = async (token: string) => {
     try {
       const accessToken = token.split("Bearer ")[1];
-      let tokenData: any = useJwt().verifyToken(accessToken);
+      let tokenData: any = jwt.verifyToken(accessToken);
       const exp = tokenData.exp;
-      delete tokenData.iat;
-      delete tokenData.exp;
 
       const diff = moment.unix(exp).diff(moment(new Date()), "milliseconds");
-      const lessThenThisMinutes = Number(JWT_REFRESH_IN);
-      const msToRenew = lessThenThisMinutes * 60 * 1000;
-      if (diff <= msToRenew) {
-        const create = useJwt().generateToken(tokenData, `${JWT_EXPIRES_IN}m`);
-        res.set("refresh_token", `${create}`);
-      }
       return {
-        diff: diff / 1000,
+        remaining: diff / 1000,
         unit: `seconds`,
         tokenData: tokenData as UserType,
       };
@@ -72,6 +64,22 @@ const authController = () => {
     }
   };
 
-  return { login, me };
+  const refreshToken = async (token: string) => {
+    try {
+      const refreshToken = token.split("Bearer ")[1];
+      let tokenData: any = jwt.verifyToken(refreshToken);
+      console.log("@refreshToken tokenData", tokenData);
+
+      console.log("newRefreshToken", tokenData);
+      return {
+        tokenData: tokenData as UserType,
+      };
+    } catch (error) {
+      console.log("@refreshToken error", error);
+      return undefined;
+    }
+  };
+
+  return { login, me, refreshToken };
 };
-export default authController;
+export default AuthController;
