@@ -5,7 +5,7 @@ import path = require("path");
 import useUuid from "../service/useUuid";
 import fs from "fs";
 
-const serviceController = () => {
+const ServiceController = () => {
   const formData = () => {
     const set = new formidable.IncomingForm();
     set.uploadDir = path.join(__dirname, "../public/uploads");
@@ -46,4 +46,4 @@ const serviceController = () => {
   return { formData, saveFile, deleteFile, mimeToExtension };
 };
 
-export default serviceController;
+export default ServiceController;

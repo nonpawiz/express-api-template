@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import authController from "../controller/authController";
+import AuthController from "../controller/AuthController";
 
+const auth = AuthController()
 export const authenticate = async (
   req: Request,
   res: Response,
@@ -18,7 +19,7 @@ export const authenticate = async (
       break;
     case token !== "":
       try {
-        const checked = await authController().me(token, res);
+        const checked = await auth.me(token);
         if (checked == undefined) {
           res.status(200).json({
             code: 401,
@@ -30,9 +31,8 @@ export const authenticate = async (
       } catch (error) {
         res.status(200).json({
           code: 401,
-          error: `${
-            language == `th` ? `เซสชันหมดอายุ` : `The session has expired.`
-          }`,
+          error: `${language == `th` ? `เซสชันหมดอายุ` : `The session has expired.`
+            }`,
         });
       }
       break;
@@ -45,7 +45,7 @@ export const hasRole = (allowedRoles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const token: string = req.headers["authorization"] || "";
     const language: string = req.headers["accept-language"] || "en";
-    const checked = await authController().me(token, res);
+    const checked = await auth.me(token);
     if (checked == undefined) {
       res.status(200).json({
         code: 401,

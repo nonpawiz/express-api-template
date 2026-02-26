@@ -1,19 +1,16 @@
-import userController from "../controller/userController";
+import UserController from "../controller/UserController";
 import { router as userRoute } from "../route";
 import useRes from "../service/useRes";
 import { AddUserType, EditUserType } from "../service/type";
 import { Request, Response, NextFunction } from "express";
-import { form } from "../app";
-import path = require("path");
-import fs from "fs";
-import useUuid from "../service/useUuid";
 
+const user = UserController()
 // @getUser
 userRoute.get(
   "/getUser",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await userController().getUser(req);
+      const result = await user.getUser(req);
       console.log("result", result);
       useRes().okHandler(res, result);
     } catch (error) {
@@ -27,7 +24,7 @@ userRoute.get(
   "/findUser/:userNo",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await userController().findUser(req);
+      const result = await user.findUser(req);
       console.log("result", result);
       useRes().okHandler(res, result);
     } catch (error) {
@@ -42,7 +39,7 @@ userRoute.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { body } = req;
-      const result = await userController().addUser(body as AddUserType);
+      const result = await user.addUser(body as AddUserType);
       console.log("result", result);
       useRes().okHandler(res, req.t(`addUserSuccess`));
     } catch (error) {
@@ -58,7 +55,7 @@ userRoute.post(
     try {
       const { body } = req;
       const language = useRes().language(req);
-      const result = await userController().editUser(
+      const result = await user.editUser(
         body as EditUserType,
         res,
         language
@@ -76,7 +73,7 @@ userRoute.post(
   "/updatePictureProfile",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await userController().updatePictureProfile(req);
+      const result = await user.updatePictureProfile(req);
       console.log("result", result);
       useRes().okHandler(res, req.t(`saveSuccess`));
     } catch (error) {
@@ -91,7 +88,7 @@ userRoute.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       console.log("req.body", req.body);
-      const result = await userController().dropUser(req.body);
+      const result = await user.dropUser(req.body);
       console.log("result", result);
       useRes().okHandler(res, req.t(`saveSuccess`));
     } catch (error) {

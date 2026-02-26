@@ -4,10 +4,10 @@ import { AddUserType, EditUserType, UserType } from "../service/type";
 import useUuid from "../service/useUuid";
 import useHash from "../service/useHash";
 import useMoment from "../service/useMoment";
-import serviceController from "./serviceController";
+import ServiceController from "./ServiceController";
 import useJwt from "../service/useJwt";
-import { JWT_EXPIRES_IN } from "./authController";
 
+const service = ServiceController()
 const userController = () => {
   const getUserList = async (req: Request) => {
     const page = Number(req.query[`page`]) || 1;
@@ -118,7 +118,7 @@ const userController = () => {
 
       res.set(
         "refresh_token",
-        useJwt().generateToken(tokenData, `${JWT_EXPIRES_IN}m`)
+        useJwt().newAccessToken(tokenData)
       );
 
       return "edit success";
@@ -129,7 +129,7 @@ const userController = () => {
 
   const updatePictureProfile = async (req: Request) => {
     return new Promise((resolve, reject) => {
-      serviceController()
+      service
         .formData()
         .parse(req, async (err: Error, field: any, files: any) => {
           const res: any = {};
@@ -152,15 +152,15 @@ const userController = () => {
                 );
               }
               if (user.userImgProfile != null) {
-                serviceController().deleteFile(
+                service.deleteFile(
                   user.userImgProfile.split("/uploads")[1]
                 );
               }
-              const fileExtension = serviceController().mimeToExtension(
+              const fileExtension = service.mimeToExtension(
                 file.mimetype
               );
               const newFileName = `${useUuid()}-${user.userId}${fileExtension}`;
-              serviceController().saveFile(file, `userImgProfile`, newFileName);
+              service.saveFile(file, `userImgProfile`, newFileName);
               await prisma.user.update({
                 where: { userNo: `${userNo}` },
                 data: {
